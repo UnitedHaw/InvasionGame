@@ -1,7 +1,8 @@
 using Code.Hexasphere;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
 public class DrawHexasphere : MonoBehaviour
 {
     [Min(5f)]
@@ -13,6 +14,7 @@ public class DrawHexasphere : MonoBehaviour
 
     private Mesh _mesh;
     private MeshFilter _meshFilter;
+    private MeshCollider _meshCollider;
     private Hexasphere _hexasphere;
 
     private float _oldRadius;
@@ -20,23 +22,27 @@ public class DrawHexasphere : MonoBehaviour
     private float _oldHexSize;
     private float _lastUpdated;
 
+    public Hexasphere Hexasphere => _hexasphere;
+
     private void Start()
     {
         _meshFilter = GetComponent<MeshFilter>();
+        _meshCollider = GetComponent<MeshCollider>();
         DrawHexasphereMesh();
 
         Debug.Log(_hexasphere.ToJson());
+
     }
 
     private void Update()
     {
-        _lastUpdated += Time.deltaTime;
-        if (_lastUpdated < 1f) return;
-        if (Mathf.Abs(_oldRadius - radius) > 0.001f || _oldDivisions != divisions ||
-            Mathf.Abs(_oldHexSize - hexSize) > 0.001f)
-        {
-            DrawHexasphereMesh();
-        }
+        //_lastUpdated += Time.deltaTime;
+        //if (_lastUpdated < 1f) return;
+        //if (Mathf.Abs(_oldRadius - radius) > 0.001f || _oldDivisions != divisions ||
+        //    Mathf.Abs(_oldHexSize - hexSize) > 0.001f)
+        //{
+        //    DrawHexasphereMesh();
+        //}
     }
 
     private void DrawHexasphereMesh()
@@ -49,9 +55,13 @@ public class DrawHexasphere : MonoBehaviour
         _hexasphere = new Hexasphere(radius, divisions, hexSize);
 
         _mesh = new Mesh();
-        _meshFilter.mesh = _mesh;
+
         _mesh.vertices = _hexasphere.MeshDetails.Vertices.ToArray();
         _mesh.triangles = _hexasphere.MeshDetails.Triangles.ToArray();
         _mesh.RecalculateNormals();
+        _mesh.RecalculateBounds();
+
+        _meshFilter.sharedMesh = _mesh;
+        _meshCollider.sharedMesh = _mesh;
     }
 }

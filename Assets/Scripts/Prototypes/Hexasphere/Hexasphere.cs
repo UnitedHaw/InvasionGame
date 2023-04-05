@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -141,6 +142,7 @@ namespace Code.Hexasphere
             _points.ForEach(point =>
             {
                 _tiles.Add(new Tile(point, _radius, _hexSize));
+               
             });
             _tiles.ForEach(tile => tile.ResolveNeighbourTiles(_tiles));
         }

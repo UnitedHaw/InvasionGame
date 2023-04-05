@@ -8,13 +8,19 @@ public class ChunkRenderer : MonoBehaviour
     private List<Vector3> _verticies = new List<Vector3>();
     private List<int> _triangels = new List<int>();
 
+    private float verticalDiametr = .87f;
+    private float horizontalDiametr = .5f;
+
     private void Start()
     {
         Mesh chunkMesh = new Mesh();
 
-        
 
-        SetHex();
+
+        GenerateHex(0, 0);
+
+
+
 
         chunkMesh.vertices = _verticies.ToArray();
         chunkMesh.triangles = _triangels.ToArray();
@@ -26,16 +32,16 @@ public class ChunkRenderer : MonoBehaviour
         GetComponent<MeshFilter>().mesh = chunkMesh;
     }
 
-    private void SetHex()
+    private void GenerateHex(float y, float z)
     {
-        var diametr = 0.87f;
+
         _verticies.Add(new Vector3(0, 0, 0));
-        _verticies.Add(new Vector3(0, -diametr, -.5f));
-        _verticies.Add(new Vector3(0, -diametr, .5f));
-        _verticies.Add(new Vector3(0, 0, 1));
-        _verticies.Add(new Vector3(0, diametr, .5f));
-        _verticies.Add(new Vector3(0, diametr, -.5f));
-        _verticies.Add(new Vector3(0, 0, -1));
+        _verticies.Add(new Vector3(0, -verticalDiametr, -horizontalDiametr));
+        _verticies.Add(new Vector3(0, -verticalDiametr, horizontalDiametr));
+        _verticies.Add(new Vector3(0, 0, horizontalDiametr*2));
+        _verticies.Add(new Vector3(0, verticalDiametr, horizontalDiametr));
+        _verticies.Add(new Vector3(0, verticalDiametr, -horizontalDiametr));
+        _verticies.Add(new Vector3(0, 0, -horizontalDiametr*2));
 
         _triangels.Add(2);
         _triangels.Add(1);
@@ -60,5 +66,13 @@ public class ChunkRenderer : MonoBehaviour
         _triangels.Add(1);
         _triangels.Add(6);
         _triangels.Add(0);
+
+
+
+        Debug.DrawLine(_verticies[1], _verticies[5], Color.yellow, 100f);
+        Debug.DrawLine(_verticies[2], _verticies[4], Color.yellow, 100f);
+        Debug.DrawLine(_verticies[6], _verticies[3], Color.yellow, 100f);
+        Debug.DrawLine((_verticies[2] + _verticies[1])/2, (_verticies[5] + _verticies[4]) / 2, Color.yellow, 100f);
     }
+
 }

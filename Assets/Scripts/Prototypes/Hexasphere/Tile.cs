@@ -34,6 +34,7 @@ namespace Code.Hexasphere
         public List<Point> Points => _points;
         public List<Face> Faces => _faces;
         public List<Tile> Neighbours => _neighbours;
+        public Point Center => _center;
         
         public void ResolveNeighbourTiles(List<Tile> allTiles)
         {
