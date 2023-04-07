@@ -1,5 +1,7 @@
+using Assets.Scripts.Prototypes;
 using Code.Hexasphere;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
@@ -12,15 +14,12 @@ public class DrawHexasphere : MonoBehaviour
     [Range(0.1f, 1f)]
     [SerializeField] private float hexSize = 1f;
 
+    [SerializeField] private HexasphereTemplateSO _hexasphereTemplateSO;
+
     private Mesh _mesh;
     private MeshFilter _meshFilter;
     private MeshCollider _meshCollider;
     private Hexasphere _hexasphere;
-
-    private float _oldRadius;
-    private int _oldDivisions;
-    private float _oldHexSize;
-    private float _lastUpdated;
 
     public Hexasphere Hexasphere => _hexasphere;
 
@@ -28,10 +27,19 @@ public class DrawHexasphere : MonoBehaviour
     {
         _meshFilter = GetComponent<MeshFilter>();
         _meshCollider = GetComponent<MeshCollider>();
-        DrawHexasphereMesh();
+
+        if (_hexasphereTemplateSO.HexasphereMesh.Mesh == null)
+        {
+            DrawHexasphereMesh();
+            _hexasphereTemplateSO.HexasphereMesh = new HexData(_mesh);
+        }
+        else
+        {
+            _meshFilter.sharedMesh = _hexasphereTemplateSO.HexasphereMesh.Mesh;
+            _meshCollider.sharedMesh = _hexasphereTemplateSO.HexasphereMesh.Mesh;
+        }
 
         Debug.Log(_hexasphere.ToJson());
-
     }
 
     private void Update()
@@ -46,12 +54,7 @@ public class DrawHexasphere : MonoBehaviour
     }
 
     private void DrawHexasphereMesh()
-    {
-        _oldRadius = radius;
-        _oldDivisions = divisions;
-        _oldHexSize = hexSize;
-        _lastUpdated = 0f;
-        
+    {   
         _hexasphere = new Hexasphere(radius, divisions, hexSize);
 
         _mesh = new Mesh();

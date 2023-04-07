@@ -171,8 +171,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 10
-  divisions: 5
+  divisions: 10
   hexSize: 1
+  _hexasphereTemplateSO: {fileID: 11400000, guid: 0c9b4948bb18b604f8fccfbc001f69b0, type: 2}
 --- !u!64 &514396928
 MeshCollider:
   m_ObjectHideFlags: 0

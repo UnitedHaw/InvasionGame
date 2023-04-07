@@ -16,6 +16,8 @@ namespace Code.Hexasphere
         private readonly List<Point> _points;
         private readonly List<Face> _icosahedronFaces;
 
+        public float Radius => _radius;
+
         public Hexasphere(float radius, int divisions, float hexSize)
         {
             _radius = radius;

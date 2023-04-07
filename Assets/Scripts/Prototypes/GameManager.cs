@@ -19,10 +19,6 @@ public class GameManager : MonoBehaviour
         _hexes = new List<Vector3>();
         _mainCamera = Camera.main;
         _hexasphere = _sphereTranform.GetComponent<DrawHexasphere>().Hexasphere;
-        _hexasphere.Tiles.ForEach(tile =>
-        {
-            _hexes.Add(tile.Center.Position);
-        });
     }
 
     private void Update()
@@ -43,9 +39,7 @@ public class GameManager : MonoBehaviour
                     StartRaycast(touch);
                     break;
 
-            }
-
-            
+            }  
         }
     }
 
@@ -59,11 +53,9 @@ public class GameManager : MonoBehaviour
             var hitPont = hitInfo.point;
             var center = hitInfo.transform.position;
 
-            Debug.DrawRay(ray.origin, hitPont - ray.origin, Color.yellow);
+            var outPoint = hitInfo.normal * _hexasphere.Radius/2;
 
-            Debug.DrawLine(center, hitInfo.normal * 10, Color.red, 10f);
-
-            var outPoint = hitInfo.normal * 10;
+            //Instantiate(_pfPoint, outPoint, Quaternion.identity);
 
             var newRay = new Ray(outPoint, -hitInfo.normal);
 
