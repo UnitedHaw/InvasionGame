@@ -13,12 +13,15 @@ public class GameManager : MonoBehaviour
 
     private Touch touch;
 
+    [SerializeField]private List<Vector3> _pointsList;
+
 
     private void Start()
     {
         _hexes = new List<Vector3>();
         _mainCamera = Camera.main;
         _hexasphere = _sphereTranform.GetComponent<DrawHexasphere>().Hexasphere;
+        _pointsList = new List<Vector3>();
     }
 
     private void Update()
@@ -55,16 +58,32 @@ public class GameManager : MonoBehaviour
 
             var outPoint = hitInfo.normal * _hexasphere.Radius/2;
 
-            //Instantiate(_pfPoint, outPoint, Quaternion.identity);
-
             var newRay = new Ray(outPoint, -hitInfo.normal);
 
             if (Physics.Raycast(newRay, out var newHit))
             {
                 var hexCenter = newHit.point;
-                Instantiate(_pfPoint, hexCenter, Quaternion.identity);
+
+                if(_pointsList.Count < 2)
+                {
+                    _pointsList.Add(Instantiate(_pfPoint, hexCenter, Quaternion.identity).position);
+
+                    if(_pointsList.Count == 2)
+                        Debug.DrawLine(_pointsList[0], _pointsList[1], Color.red, 2f);
+                }
+                else
+                {              
+                    _pointsList.Clear();
+                    _pointsList.Add(Instantiate(_pfPoint, hexCenter, Quaternion.identity).position);
+                }
+                
             }
 
         }
+    }
+
+    private void InstantiateObject(Vector3 from, Vector3 to)
+    {
+
     }
 }

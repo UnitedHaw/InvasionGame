@@ -14,8 +14,6 @@ public class DrawHexasphere : MonoBehaviour
     [Range(0.1f, 1f)]
     [SerializeField] private float hexSize = 1f;
 
-    [SerializeField] private HexasphereTemplateSO _hexasphereTemplateSO;
-
     private Mesh _mesh;
     private MeshFilter _meshFilter;
     private MeshCollider _meshCollider;
@@ -28,16 +26,7 @@ public class DrawHexasphere : MonoBehaviour
         _meshFilter = GetComponent<MeshFilter>();
         _meshCollider = GetComponent<MeshCollider>();
 
-        if (_hexasphereTemplateSO.HexasphereMesh.Mesh == null)
-        {
-            DrawHexasphereMesh();
-            _hexasphereTemplateSO.HexasphereMesh = new HexData(_mesh);
-        }
-        else
-        {
-            _meshFilter.sharedMesh = _hexasphereTemplateSO.HexasphereMesh.Mesh;
-            _meshCollider.sharedMesh = _hexasphereTemplateSO.HexasphereMesh.Mesh;
-        }
+        DrawHexasphereMesh();
 
         Debug.Log(_hexasphere.ToJson());
     }
