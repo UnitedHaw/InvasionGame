@@ -7,21 +7,17 @@ public class GameManager : MonoBehaviour
 {
     [SerializeField] private Transform _sphereTranform;
     [SerializeField] private Transform _pfPoint;
+    [SerializeField] private DrawHexasphere _drawHexasphere;
     private Hexasphere _hexasphere;
     private Camera _mainCamera;
-    private List<Vector3> _hexes;
 
     private Touch touch;
 
-    [SerializeField]private List<Vector3> _pointsList;
-
-
     private void Start()
     {
-        _hexes = new List<Vector3>();
         _mainCamera = Camera.main;
         _hexasphere = _sphereTranform.GetComponent<DrawHexasphere>().Hexasphere;
-        _pointsList = new List<Vector3>();
+
     }
 
     private void Update()
@@ -63,18 +59,14 @@ public class GameManager : MonoBehaviour
             if (Physics.Raycast(newRay, out var newHit))
             {
                 var hexCenter = newHit.point;
+                var vectorInt = Vector3Int.CeilToInt(newHit.point*100);
+                var roundedVector = (Vector3)vectorInt / 100;
 
-                if(_pointsList.Count < 2)
+                Debug.Log("Try find tile " + roundedVector);
+                Debug.DrawLine(transform.position, newHit.point, Color.red, 10f);
+                if (_drawHexasphere.Territories.ContainsKey(Vector3Int.CeilToInt(newHit.point * 100) / 100))
                 {
-                    _pointsList.Add(Instantiate(_pfPoint, hexCenter, Quaternion.identity).position);
-
-                    if(_pointsList.Count == 2)
-                        Debug.DrawLine(_pointsList[0], _pointsList[1], Color.red, 2f);
-                }
-                else
-                {              
-                    _pointsList.Clear();
-                    _pointsList.Add(Instantiate(_pfPoint, hexCenter, Quaternion.identity).position);
+                    Debug.Log("Tile Exists " + Vector3Int.CeilToInt(newHit.point * 100) / 100);
                 }
                 
             }

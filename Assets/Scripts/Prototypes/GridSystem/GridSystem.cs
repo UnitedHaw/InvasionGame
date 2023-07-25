@@ -6,9 +6,12 @@ public class GridSystem : MonoBehaviour
 {
     private Grid _grid;
 
+    private Vector3 gridPositionOffest;
+
     void Start()
     {
         _grid = new Grid(6, 7, 5f, transform);
+        gridPositionOffest = transform.position;
     }
 
     private void Update()
@@ -16,9 +19,12 @@ public class GridSystem : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             var mousePosition = Input.mousePosition;
-            mousePosition.z = 0;
+            var screenPosition = Camera.main.ScreenToWorldPoint(mousePosition);
+            screenPosition -= gridPositionOffest;
+            screenPosition.z = 0;
 
-            _grid.SetValue(Camera.main.ScreenToWorldPoint(mousePosition), 1);
+            _grid.SetValue(screenPosition, 1);
+            
         }
     }
 }

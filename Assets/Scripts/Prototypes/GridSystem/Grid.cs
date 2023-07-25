@@ -3,23 +3,19 @@ using UnityEngine;
 
 public class Grid
 {
-    private int width;
-    private int height;
-    private float cellSize;
+    private int _width;
+    private int _height;
+    private float _cellSize;
     private float offset = .5f;
 
     private SquareCell[,] _gridArray;
 
-    private GridFactory _gridFactory;
-
-
     public Grid(int width, int height, float cellSize, Transform parentTransform)
     {
-        this.width = width;
-        this.height = height;
-        this.cellSize = cellSize;
-        _gridFactory = new GridFactory();
-        _gridArray = new SquareCell[width, height];
+        _width = width;
+        _height = height;
+        _cellSize = cellSize;
+        _gridArray = new SquareCell[_width, _height];
 
         for (int x = 0; x < _gridArray.GetLength(0); x++)
         {
@@ -41,18 +37,18 @@ public class Grid
 
     private Vector3 GetWorldPosition(float x, float y)
     {
-        return new Vector3(x, y) * cellSize;
+        return new Vector3(x, y) * _cellSize;
     }
 
     private void GetXY(Vector3 worldPosition, out int x, out int y)
     {
-        x = Mathf.FloorToInt(worldPosition.x / cellSize);
-        y = Mathf.FloorToInt(worldPosition.y / cellSize);
+        x = Mathf.FloorToInt(worldPosition.x / _cellSize);
+        y = Mathf.FloorToInt(worldPosition.y / _cellSize);
     }
 
      public void SetValue(int x, int y, int value)
     {
-        if(x >= 0 && y >= 0 && x < width && y < height)
+        if(x >= 0 && y >= 0 && x < _width && y < _height)
             _gridArray[x, y].SetValue(value);
     }
 

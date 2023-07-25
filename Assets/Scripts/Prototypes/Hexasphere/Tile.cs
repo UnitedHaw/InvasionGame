@@ -9,6 +9,7 @@ namespace Code.Hexasphere
         private readonly Point _center;
         private readonly float _radius;
         private readonly float _size;
+        private readonly Vector3 _tileCenter;
 
         private readonly List<Face> _faces;
         private readonly List<Point> _points;
@@ -29,13 +30,28 @@ namespace Code.Hexasphere
             List<Face> icosahedronFaces = center.GetOrderedFaces();
             StoreNeighbourCenters(icosahedronFaces);
             BuildFaces(icosahedronFaces);
+
+            _tileCenter = GetTileCenter();
+        }
+
+        private Vector3 GetTileCenter()
+        {
+            var center = Vector3.zero;
+
+            _points.ForEach(point =>
+            {
+                center += point.Position;
+            });
+
+            return center / _points.Count;
         }
 
         public List<Point> Points => _points;
         public List<Face> Faces => _faces;
         public List<Tile> Neighbours => _neighbours;
         public Point Center => _center;
-        
+
+        public Vector3 TileCenter => _tileCenter;
         public void ResolveNeighbourTiles(List<Tile> allTiles)
         {
             List<string> neighbourIds = _neighbourCenters.Select(center => center.ID).ToList();

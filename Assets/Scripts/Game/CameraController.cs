@@ -41,8 +41,6 @@ public class CameraController : MonoBehaviour
                     transform.position = transform.localRotation * new Vector3(1, 1, 1) + new Vector3(0, 0);
 
                     //xInput = transform.localEulerAngles.y + touch.deltaPosition
-                    Debug.Log("X" + touchAxisX);
-                    Debug.Log("Y" + touchAxisY);
                     break;
             }
         

@@ -10,6 +10,7 @@ namespace Code.Hexasphere
         private readonly string _id;
         private readonly List<Point> _points;
 
+        private Vector3 _normal;
         public Face(Point point1, Point point2, Point point3, bool trackFaceInPoints = true)
         {
             _id = Guid.NewGuid().ToString();
@@ -20,8 +21,8 @@ namespace Code.Hexasphere
             Vector3 center = new Vector3(centerX, centerY, centerZ);
 
             //Determine correct winding order
-            Vector3 normal = GetNormal(point1, point2, point3);
-            _points = IsNormalPointingAwayFromOrigin(center, normal) ? 
+            Vector3 _normal = GetNormal(point1, point2, point3);
+            _points = IsNormalPointingAwayFromOrigin(center, _normal) ? 
                 new List<Point> {point1, point2, point3} : 
                 new List<Point> {point1, point3, point2};
 
