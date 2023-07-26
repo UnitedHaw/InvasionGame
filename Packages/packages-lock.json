@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.coffee.git-dependency-resolver": {
+      "version": "https://github.com/mob-sakai/GitDependencyResolverForUnity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "d4fc38c92fb139b4184912f20556ab27a3b519fa"
+    },
     "com.unity.cinemachine": {
       "version": "2.8.9",
       "depth": 0,
@@ -172,13 +179,12 @@
       "url": "https://packages.unity.com"
     },
     "jp.hadashikick.vcontainer": {
-      "version": "https://github.com/hadashiA/VContainer.git?path=VContainer/Assets/VContainer#1.13.0",
+      "version": "file:.jp.hadashikick.vcontainer@1.13.2",
       "depth": 0,
-      "source": "git",
+      "source": "embedded",
       "dependencies": {
         "com.unity.nuget.mono-cecil": "1.10.1"
-      },
-      "hash": "c3777379863e7d21148739eacb9f22cc64b4e7c8"
+      }
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
