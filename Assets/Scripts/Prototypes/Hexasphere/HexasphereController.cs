@@ -1,3 +1,4 @@
+using Assets.Scripts.Game;
 using Assets.Scripts.Prototypes;
 using Assets.Scripts.Prototypes.GridSystem;
 using Assets.Scripts.Utils;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(MeshCollider))]
-public class DrawHexasphere : MonoBehaviour
+public class HexasphereController : MonoBehaviour
 {
     [Min(5f)]
     [SerializeField] private float radius = 10f;
@@ -27,9 +28,9 @@ public class DrawHexasphere : MonoBehaviour
     public List<Vector3> TilesCenters => _tilesCenters;
     public Hexasphere Hexasphere => _hexasphere;
 
-    private Dictionary<Vector3, Territory> _territories;
+    private Dictionary<Vector3Int, Territory> _territories;
 
-    public Dictionary<Vector3, Territory> Territories => _territories;
+    public Dictionary<Vector3Int, Territory> Territories => _territories;
 
     private void Start()
     {
@@ -40,14 +41,15 @@ public class DrawHexasphere : MonoBehaviour
 
         Debug.Log(_hexasphere.ToJson());
 
-        _territories = new Dictionary<Vector3, Territory>();
+        _territories = new Dictionary<Vector3Int, Territory>();
         _tilesCenters = new List<Vector3>();
 
-        int index = 0;
+        int id = 0;
         _hexasphere.Tiles.ForEach(tile =>
         {
-            var roundVector = Vector3Int.CeilToInt(tile.TileCenter*100);
-            _territories[(Vector3)roundVector/100] = new Territory();
+            id++;
+            var roundVector = Vector3Int.CeilToInt(tile.TileCenter * Constants.FloatRounder);
+            _territories[roundVector] = new Territory(id, tile);
             _tilesCenters.Add(tile.TileCenter);
         });
 

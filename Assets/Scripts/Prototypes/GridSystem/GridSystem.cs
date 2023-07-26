@@ -5,13 +5,13 @@ using UnityEngine;
 public class GridSystem : MonoBehaviour
 {
     private Grid _grid;
-
+    
     private Vector3 gridPositionOffest;
 
     void Start()
     {
         _grid = new Grid(6, 7, 5f, transform);
-        gridPositionOffest = transform.position;
+        gridPositionOffest = transform.position;   
     }
 
     private void Update()

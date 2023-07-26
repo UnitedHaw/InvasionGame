@@ -1,77 +1,63 @@
+using Assets.Scripts.Game;
+using Assets.Scripts.Prototypes.GridSystem;
 using Code.Hexasphere;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Transform _sphereTranform;
     [SerializeField] private Transform _pfPoint;
-    [SerializeField] private DrawHexasphere _drawHexasphere;
-    private Hexasphere _hexasphere;
+    [SerializeField] private HexasphereController _hexasphereController;
+    [SerializeField] private Button _cameraButton;
     private Camera _mainCamera;
+    private GameInput _gameInput;
+    private Control _control;
 
-    private Touch touch;
+    private Func<Vector3, Territory> SetFirstTileWithTouch;
+    private Func<Vector3, Territory> SetSecondTileWithTouch;
+    private Touch _touch;
+
+    private Territory _firstFocusedTerritory;
+    private Territory _secondFocusedTerritory;
+
+    [SerializeField] private int firstTileId;
+    [SerializeField] private int secondTileId;
 
     private void Start()
     {
         _mainCamera = Camera.main;
-        _hexasphere = _sphereTranform.GetComponent<DrawHexasphere>().Hexasphere;
+        _gameInput = new GameInput();
+        _control = new Control(_mainCamera, _cameraButton);
+        _firstFocusedTerritory = new Territory(0);
+        _secondFocusedTerritory = new Territory(0);
 
+        SetFirstTileWithTouch = GetFirstTile;
+        SetSecondTileWithTouch = GetSecondTile;
     }
 
     private void Update()
     {
-        ReycastInput();
+        _gameInput.TouchInput(SetFirstTileWithTouch);
+        _gameInput.TouchInput(endedEvent: SetSecondTileWithTouch);
     }
 
-    private void ReycastInput()
+    private Territory GetFirstTile(Vector3 screenPoint)
     {
-        if (Input.touchCount > 0)
-        {
-            touch = Input.GetTouch(0);
-
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-
-                    StartRaycast(touch);
-                    break;
-
-            }  
-        }
+        _firstFocusedTerritory = _control.GetTileTerritoryWithRay(screenPoint, _hexasphereController);
+        firstTileId = _firstFocusedTerritory.Id;
+        return _firstFocusedTerritory;
     }
 
-    private void StartRaycast(Touch touch)
+    private Territory GetSecondTile(Vector3 screenPoint)
     {
-        var touchPoint = touch.position;
-        Ray ray = _mainCamera.ScreenPointToRay(touchPoint);
-
-        if (Physics.Raycast(ray, out var hitInfo))
-        {
-            var hitPont = hitInfo.point;
-            var center = hitInfo.transform.position;
-
-            var outPoint = hitInfo.normal * _hexasphere.Radius/2;
-
-            var newRay = new Ray(outPoint, -hitInfo.normal);
-
-            if (Physics.Raycast(newRay, out var newHit))
-            {
-                var hexCenter = newHit.point;
-                var vectorInt = Vector3Int.CeilToInt(newHit.point*100);
-                var roundedVector = (Vector3)vectorInt / 100;
-
-                Debug.Log("Try find tile " + roundedVector);
-                Debug.DrawLine(transform.position, newHit.point, Color.red, 10f);
-                if (_drawHexasphere.Territories.ContainsKey(Vector3Int.CeilToInt(newHit.point * 100) / 100))
-                {
-                    Debug.Log("Tile Exists " + Vector3Int.CeilToInt(newHit.point * 100) / 100);
-                }
-                
-            }
-
-        }
+        _secondFocusedTerritory = _control.GetTileTerritoryWithRay(screenPoint, _hexasphereController);
+        secondTileId = _secondFocusedTerritory.Id;
+        return _secondFocusedTerritory;
     }
 
     private void InstantiateObject(Vector3 from, Vector3 to)

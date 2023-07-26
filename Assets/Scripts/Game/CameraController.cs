@@ -15,8 +15,6 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        
-
         if(Input.touchCount > 0)
         {
             touch = Input.GetTouch(0);
@@ -26,7 +24,6 @@ public class CameraController : MonoBehaviour
                 case TouchPhase.Began:
                     break;
                 case TouchPhase.Moved:
-                    //Debug.Log("Viewport Point: " + Camera.main.ScreenToViewportPoint(touch.position));
                     var touchAxisX = touch.deltaPosition.normalized.x;
                     var touchAxisY = touch.deltaPosition.normalized.y;
                     touchAxisX = Mathf.Clamp(touchAxisX, -1, 1);
@@ -40,18 +37,8 @@ public class CameraController : MonoBehaviour
                     transform.localEulerAngles = new Vector3(-yInput, xInput);
                     transform.position = transform.localRotation * new Vector3(1, 1, 1) + new Vector3(0, 0);
 
-                    //xInput = transform.localEulerAngles.y + touch.deltaPosition
                     break;
             }
-        
         }
-
-        //xInput = transform.localEulerAngles.y + -Input.GetAxis("Horizontal") * sensitivity;
-        //Debug.Log("Input " + Input.GetAxis("Horizontal"));
-        //yInput += Input.GetAxis("Vertical") * sensitivity;
-        //yInput = Mathf.Clamp(yInput, -limit, limit);
-
-        //transform.localEulerAngles = new Vector3(-yInput, xInput, 0);
-        //transform.position = transform.localRotation * new Vector3(1, 1, 1) + new Vector3(0, 0);
     }
 }
